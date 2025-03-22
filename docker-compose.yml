@@ -1,0 +1,31 @@
+services:
+  phanpy:
+    #image: ghcr.io/cheeaun/phanpy:latest
+    build:
+      context: .
+    container_name: phanpy
+    #ports:
+    #  - 8080:80
+
+    networks:
+      - caddy
+
+    labels:
+      com.centurylinklabs.watchtower.enable: true
+      caddy: phanpy.brothertec.eu
+      caddy.route.appsec: ""
+      caddy.route.crowdsec: ""
+      caddy.route.reverse_proxy: "{{upstreams 80}}"
+      caddy.encode: "zstd gzip"
+      caddy.log: ""
+      caddy.log.output: "file /logs/phanpy.brothertec.eu.log"
+      caddy.log.output.roll_size: "100MiB"
+      caddy.log.output.roll_keep: "5"
+      caddy.log.output.roll_keep_for: "100d"
+      caddy.log.format: "json"
+      caddy.log.level: "INFO"
+
+networks:
+  caddy:
+    external: true
+
